@@ -3,6 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <style>
+        body {
+            width: calc(100% - 20px);
+            height: 100%;
+            overflow: hidden;
+            padding: 20px;
+            margin: 0px;
+        }
+
         .puyofield {
             position: relative;
         }
@@ -15,7 +23,7 @@
             border-radius: 100%;
         }
 
-        .puyofield .puyo:not(.player-0):not(.player-1):not(.nextpuyo) {
+        .puyofield .puyo {
             box-sizing: border-box;
             border: 1px solid #ccc;
         }
@@ -86,6 +94,24 @@
             left: 0px;
         }
 
+        .puyofield .rensa {
+            position: absolute;
+            top: 160px;
+            left: 100px;
+            content: 1;
+            width: 100px;
+            height: 15px;
+        }
+
+        .puyofield .score {
+            position: absolute;
+            top: 190px;
+            left: 100px;
+            content: 1;
+            width: 100px;
+            height: 15px;
+        }
+
         .puyofield .playerpuyo {
             position: absolute;
         }
@@ -115,6 +141,10 @@
             border-radius: 100%;
         }
 
+        details {
+            padding: 5px;
+        }
+
     </style>
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
     <script>
@@ -141,6 +171,15 @@
             var ispop;
             var keymap = {}; // 키 리스너 입력 배열
             var ispopstateend;
+            var rensa;
+            var puyoScore;
+            var connetCount;
+            var colorCount;
+            var rightspinfail;
+            var leftspinfail;
+            var colorBonusTable = [0, 0, 3, 6, 12, 24]
+            var rensaBonusTable = [0, 0, 8, 16, 32, 64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448, 480, 512];
+            var connectBonusTable = [0, 0, 0, 0, 0, 2, 3, 4, 5, 6, 7, 10];;
 
             //숫자+문자를 시드값으로 변환
             function readSeedInput() {
@@ -240,6 +279,7 @@
                 //필드 html 요소 생성
                 function drawGameElements() {
                     var sethtml = "";
+                    //기본 필드 생성
                     for (var i = 0; i < 13; i++) {
                         sethtml += "<div>"
                         for (var j = 0; j < 6; j++) {
@@ -248,15 +288,19 @@
                         sethtml += "</div>";
                     }
 
-                    //player puyo
+                    //player puyo 생성
                     sethtml += "<div class='playerpuyo'>";
                     sethtml += "<div class='puyo player-0'></div>";
                     sethtml += "<div class='puyo player-1'></div>";
                     sethtml += "</div>";
 
+                    //넥스트 뿌요 생성
                     for (var i = 0; i < 4; i++) {
                         sethtml += "<div class='puyo nextpuyo next-" + i + "'>"
                     }
+                    sethtml += "</div></div></div></div>";
+                    sethtml += "<div class='score'></div>";
+                    sethtml += "<div class='rensa'></div>";
                     $(".puyogame .puyofield").html(sethtml);
                 }
 
@@ -290,6 +334,11 @@
                 puyocollide[1] = 0;
                 puyocollide[2] = 0;
                 puyocollide[3] = 0;
+                puyoScore = 0;
+                connetCount = 0;
+                colorCount = 0;
+                rightspinfail = 0;
+                leftspinfail = 0;
                 $(".puyofield .playerpuyo").css("transition", "left 0.08s ease, transform 0.1s linear");
                 $(".puyofield .playerpuyo").css("transform-origin", "8px 24px");
 
@@ -306,7 +355,7 @@
                 updateGameFieldHeight();
 
                 //set puyotable
-                switch ($("#game1 > select").val()) {
+                switch ($(".puyoBagOption").val()) {
                     case "pure": //노멀 4색 뿌요
                         var temprand = Math.round(rand() * 5);
                         puyotable[1] = 64;
@@ -331,12 +380,14 @@
                         puyotable[Math.round(rand() * 5)] = 0;
                         break;
                     default:
+                        var temprand = Math.round(rand() * 5);
                         puyotable[1] = 64;
                         puyotable[2] = 64;
                         puyotable[3] = 64;
                         puyotable[4] = 64;
                         puyotable[5] = 64;
-                        puyotable[Math.round(rand() * 5)] = 0;
+                        puyotable[temprand] = 0;
+                        //alert(temprand);
                         break;
                 }
 
@@ -355,11 +406,20 @@
                 for (var i = 4; i < 256; i++) {
                     var tmp = 0;
                     var puyochecker = new Array(7);
+                    //초반 4수의 색 읽음
+                    puyochecker[0] = 0;
+                    puyochecker[1] = 0;
+                    puyochecker[2] = 0;
+                    puyochecker[3] = 0;
+                    puyochecker[4] = 0;
+                    puyochecker[5] = 0;
+                    puyochecker[6] = 0;
                     puyochecker[puyobag[0]] = 1;
                     puyochecker[puyobag[1]] = 1;
                     puyochecker[puyobag[2]] = 1;
                     puyochecker[puyobag[3]] = 1;
-                    for (var j = 0; j < 4; j++) {
+                    //색의 수를 계산
+                    for (var j = 0; j < 7; j++) {
                         tmp += puyochecker[j];
                     }
                     if (tmp < 4) {
@@ -429,14 +489,25 @@
                                 poplist = new Array();
                                 dfs(i, j, gamefield[i + 1][j]);
                                 if (poplist.length >= 4) {
+                                    connectCount = poplist.length;
                                     ispopstate = 1;
+                                    var colortable = new Array([0, 0, 0, 0, 0, 0, 0]);
                                     poplist.forEach(function(p) {
                                         gamefield[p.y + 1][p.x] = 0;
+                                        colortable[p.c] = 1;
+                                        colorCount = 0;
+                                        for (var i = 1; i < 6; i++) {
+                                            if (colortable[i] == 1)
+                                                colorCount++;
+                                        }
                                     });
                                 }
                             }
                         }
                     }
+
+
+
 
                     return ispopstate;
                 }
@@ -452,7 +523,8 @@
                                 if (gamefield[ny + 1][nx] == ch) {
                                     poplist.push({
                                         y: ny,
-                                        x: nx
+                                        x: nx,
+                                        c: gamefield[ny + 1][nx]
                                     });
                                     visited[ny + 1][nx] = 1;
                                     dfs(ny, nx, ch);
@@ -632,6 +704,7 @@
                         ispopstateend = 0;
                         $(".playerpuyo").hide();
                         ispop = 1;
+                        rensa = 0;
                     }
 
                     //키 입력
@@ -672,12 +745,38 @@
                         if (keymap["40"] == true && puyocollide[2] == 0) {
                             //down
                             puyoy += 4;
+                            puyoScore += 1;
+                            document.querySelector(".score").textContent = puyoScore;
                         }
                         //뿌요 수직이동 상승
                         if (keymap["38"] == true && puyocollide[0] == 0 && puyoh > 0) {
                             //down
                             puyoy -= 4;
                         }
+
+                        //퀵턴
+                        if (keymap["88"] == true && puyocollide[1] == 1 && puyocollide[3] == 1 && puyospindelay <= 0) {
+                            //우측 퀵턴
+                            if (rightspinfail >= 0.5) {
+                                puyor += 2;
+                                puyospindelay = 1;
+                                leftspinfail = 0;
+                                rightspinfail = 0;
+                            } else {
+                                rightspinfail += 10;
+                            }
+                        } else if (keymap["90"] == true && puyocollide[1] == 1 && puyocollide[3] == 1 && puyospindelay <= 0) {
+                            //좌측 퀵턴
+                            if (leftspinfail >= 0.5) {
+                                puyor -= 2;
+                                puyospindelay = 1;
+                                leftspinfail = 0;
+                                rightspinfail = 0;
+                            } else {
+                                leftspinfail += 10;
+                            }
+                        }
+
                         //뿌요 회전
                         if (keymap["90"] == true && puyospindelay <= 0 && (!(puyocollide[1] == 1 && puyocollide[3] == 1))) {
                             //좌회전
@@ -687,20 +786,40 @@
                             //우회전
                             puyor += 1;
                             puyospindelay = 1;
-                        } else if (keymap["88"] == true || keymap["90"] == true) {
+                        } else if (keymap["90"] == true || keymap["88"] == true) {
                             puyospindelay = 1;
                         } else {
                             //스핀안하는중
                             puyospindelay = 0;
+                            if (leftspinfail >= 0) {
+                                leftspinfail -= 0.1;
+                            }
+                            if (rightspinfail >= 0) {
+                                rightspinfail -= 0.1;
+                            }
                         }
                     }
                 } else if (ispop == 1) {
-
                     if (deltaframe >= 10 && ispopstateend == 0) {
 
                         deltaframe = 0;
                         //뿌요 탐색 및 터뜨림
                         ispopstateend = explorefield();
+                        if (ispopstateend == 1) {
+                            rensa++;
+                            var bonustmp = (rensaBonusTable[rensa] + connectBonusTable[connetCount] + colorBonusTable[colorCount]);
+                            if (bonustmp == 0) bonustmp = 1;
+                            puyoScore += connectCount * bonustmp * 10;
+                            document.querySelector(".score").textContent = puyoScore;
+                            document.querySelector(".rensa").textContent = rensa + "연쇄";
+                            if (rensa < 7) {
+                                //new Audio("/resource/puyo/chain" + rensa + ".ogg").play();
+                            } else {
+                                //new Audio("/resource/puyo/chain" + 7 + ".ogg").play();
+                            }
+                        }
+
+
                         //터진상태 렌더링
                         renderScreen();
                         //뿌요 터짐 종료 일반모드로 전환
@@ -716,9 +835,25 @@
                             //필드 높이 저장
                             updateGameFieldHeight();
                             $(".playerpuyo").show();
+                            var isallclear = 1;
+                            for (var i = 0; i < 13; i++) {
+                                for (var j = 0; j < 6; j++) {
+                                    if (gamefield[i][j] != 0) {
+                                        isallclear = 0;
+                                        break;
+                                    }
+                                }
+                            }
+                            if (isallclear == 1) {
+                                //new Audio("/resource/puyo/allclear.ogg").play();
+
+                                puyoScore += 2100;
+                                document.querySelector(".score").textContent = puyoScore;
+
+                            }
                         }
                         deltaframe = 0;
-                    } else if (deltaframe >= 60 && ispopstateend == 1) {
+                    } else if (deltaframe >= 80 && ispopstateend == 1) {
                         //터진모습 렌더링
                         puyoapplygravity();
                         renderScreen();
@@ -744,13 +879,27 @@
     <div class="puyoGame" id="game1">
         <div class="puyofield"></div>
         <input class="puyoSeed" type="text"><button class="seedApply">랜덤 시드 리셋&적용</button>
-        <select class="puyooption">
-            <option value="pure">일반 4색 뿌요</option>
-            <option value="nextvoragarbage">넥스트가 only 보라색과 방해뿌요</option>
-            <option value="nextaddgarbage">넥스트에 방해뿌요 추가</option>
-        </select>
+
     </div>
     <div id="debug"></div>
+    <br>
+
+    <details>
+        <summary>옵션</summary>
+        <br>시드값 저장소<br>
+        <select onchange="if(this.value != 0){document.querySelectorAll('.puyoSeed')[0].value=this.value}if(this.value=='time'){document.querySelectorAll('.puyoSeed')[0].value=(new Date().getMonth().toString()+1)+''+new Date().getDate().toString()}">
+            <option>시드값을 선택해주세요</option>
+            <option value=time>오늘의 시드값</option>
+            <option value=31902>31902-allclear</option>
+        </select>
+        <br>
+        <br>색패 룰<br>
+        <select class="puyoBagOption">
+            <option value="pure">일반 4색 뿌요</option>
+            <option value="nextvoragarbage">넥스트가 only 보라색과 방해뿌요(미완성)</option>
+            <option value="nextaddgarbage">넥스트에 방해뿌요 추가(미완성)</option>
+        </select>
+    </details>
 </body>
 
 </html>
