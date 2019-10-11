@@ -1,0 +1,11 @@
+{
+  "name": "JsPuyopuyo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/boxqkrtm/JsPuyopuyo.git",
+  "author": "https://github.com/boxqkrtm",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jquery": "^3.3.31"
+  }
+}
