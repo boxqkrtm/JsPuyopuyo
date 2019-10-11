@@ -1,0 +1,159 @@
+body {
+    width: 330px;
+    height: 100%;
+    overflow: auto;
+    padding: 20px;
+    margin: 0px;
+    border: 1px solid #ccc;
+}
+
+body > .puyoGame{
+    opacity:0.5;
+    transform: scale(1.2);
+    padding-left: 40px;
+    padding-top: 40px;
+    margin-bottom: 36px;
+}
+
+body.disableScroll{
+    overflow: hidden;
+}
+
+body.disableScroll > .puyoGame{
+    opacity:1;
+}
+
+
+.puyofield {
+    position: relative;
+}
+
+.puyofield .puyo {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    background: white;
+    border-radius: 100%;
+}
+
+.puyofield .puyo {
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+}
+
+.puyofield .puyo.red {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    background: red;
+}
+
+.puyofield .puyo.blue {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    background: blue;
+}
+
+.puyofield .puyo.green {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    background: green;
+}
+
+.puyofield .puyo.yellow {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    background: yellow;
+}
+
+.puyofield .puyo.purple {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    background: purple;
+}
+
+.puyofield .puyo.garbage {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    background: #d4d4d4;
+}
+
+.puyofield .puyo.next-0 {
+    position: absolute;
+    top: 50px;
+    left: 120px;
+}
+
+.puyofield .puyo.next-1 {
+    position: absolute;
+    top: 16px;
+    left: 0px;
+}
+
+.puyofield .puyo.next-2 {
+    position: absolute;
+    top: 10px;
+    left: 20px;
+}
+
+.puyofield .puyo.next-3 {
+    position: absolute;
+    top: 16px;
+    left: 0px;
+}
+
+.puyofield .rensa {
+    position: absolute;
+    top: 160px;
+    left: 100px;
+    content: 1;
+    width: 100px;
+    height: 15px;
+}
+
+.puyofield .score {
+    position: absolute;
+    top: 190px;
+    left: 100px;
+    content: 1;
+    width: 100px;
+    height: 15px;
+}
+
+.puyofield .playerpuyo {
+    position: absolute;
+}
+
+/* 13열 숨김 */
+.puyo.arr0-0,
+.puyo.arr0-1,
+.puyo.arr0-2,
+.puyo.arr0-3,
+.puyo.arr0-4,
+.puyo.arr0-5 {
+    opacity: 0.2;
+}
+
+
+.puyofield .playerpuyo .player-0 {
+    position: relative;
+    top: 0px;
+    left: 0px;
+    border-radius: 100%;
+}
+
+.puyofield .playerpuyo .player-1 {
+    position: relative;
+    top: 16px;
+    left: -16px;
+    border-radius: 100%;
+}
+
+details {
+    padding: 5px;
+}
