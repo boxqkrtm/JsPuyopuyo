@@ -1,34 +1,25 @@
 body {
-    width: 330px;
-    height: 100%;
-    overflow: auto;
-    padding: 20px;
-    margin: 0px;
-    border: 1px solid #ccc;
+    margin: 0;
 }
 
-body > .puyoGame{
-    opacity:0.5;
-    transform: scale(1.2);
-    padding-left: 40px;
-    padding-top: 40px;
-    margin-bottom: 36px;
+.puyogame {
+    opacity: 1;
+    display: flex;
+    justify-content: center;
+    padding: 100px 0;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 20px;
 }
-
-body.disableScroll{
-    overflow: hidden;
-}
-
-body.disableScroll > .puyoGame{
-    opacity:1;
-}
-
 
 .puyofield {
     position: relative;
+    display: inline-block;
 }
 
-.puyofield .puyo {
+.puyoline {
+}
+
+.puyo {
     width: 16px;
     height: 16px;
     display: inline-block;
@@ -36,97 +27,125 @@ body.disableScroll > .puyoGame{
     border-radius: 100%;
 }
 
-.puyofield .puyo {
+.puyo {
     box-sizing: border-box;
     border: 1px solid #ccc;
 }
 
-.puyofield .puyo.red {
+.puyo.red {
     width: 16px;
     height: 16px;
     display: inline-block;
     background: red;
 }
 
-.puyofield .puyo.blue {
+.puyo.blue {
     width: 16px;
     height: 16px;
     display: inline-block;
     background: blue;
 }
 
-.puyofield .puyo.green {
+.puyo.green {
     width: 16px;
     height: 16px;
     display: inline-block;
     background: green;
 }
 
-.puyofield .puyo.yellow {
+.puyo.yellow {
     width: 16px;
     height: 16px;
     display: inline-block;
     background: yellow;
 }
 
-.puyofield .puyo.purple {
+.puyo.purple {
     width: 16px;
     height: 16px;
     display: inline-block;
     background: purple;
 }
 
-.puyofield .puyo.garbage {
+.puyo.garbage {
     width: 16px;
     height: 16px;
     display: inline-block;
     background: #d4d4d4;
 }
 
-.puyofield .puyo.next-0 {
+.playerpuyo {
     position: absolute;
-    top: 50px;
-    left: 120px;
+    white-space: nowrap;
 }
 
-.puyofield .puyo.next-1 {
-    position: absolute;
-    top: 16px;
-    left: 0px;
+.gameinfo {
+    margin-top: 16px;
+    text-align: center;
+    margin-left: 10px;
 }
 
-.puyofield .puyo.next-2 {
-    position: absolute;
-    top: 10px;
-    left: 20px;
+.gameinfo .title {
+    background: black;
+    color: white;
+    margin: 0 10px 5px;
+    padding: 3px;
+    font-size: 0.6rem;
+    border-radius: 5px;
 }
 
-.puyofield .puyo.next-3 {
-    position: absolute;
-    top: 16px;
-    left: 0px;
+.gameinfo .nextgrid {
+    display: inline-grid;
+    grid-template-columns: repeat(2, 12px);
+    grid-template-rows: repeat(4, 12px);
+    padding: 10px;
+    border: 1px solid #ddd;
+    margin-bottom: 5px;
 }
 
-.puyofield .rensa {
-    position: absolute;
-    top: 160px;
-    left: 100px;
-    content: 1;
-    width: 100px;
-    height: 15px;
+.gameinfo .nextgrid .puyo {
+    width: 12px;
+    height: 12px;
 }
 
-.puyofield .score {
-    position: absolute;
-    top: 190px;
-    left: 100px;
-    content: 1;
-    width: 100px;
-    height: 15px;
+.nextgrid .nextpuyo {
+    display: inline-block;
 }
 
-.puyofield .playerpuyo {
-    position: absolute;
+.nextgrid .puyo.next-0 {
+    grid-column-start: 1;
+    grid-row-start: 1;
+}
+
+.nextgrid .puyo.next-1 {
+    grid-column-start: 1;
+    grid-row-start: 2;
+}
+
+.nextgrid .puyo.next-2 {
+    grid-column-start: 2;
+    grid-row-start: 3;
+}
+
+.nextgrid .puyo.next-3 {
+    grid-column-start: 2;
+    grid-row-start: 4;
+}
+
+.gameinfo .rensa {
+    width: 64px;
+    height: 16px;
+    font-size: 0.8rem;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.gameinfo .score {
+    width: 64px;
+    height: 16px;
+    font-size: 0.8rem;
+    margin-bottom: 5px;
+    text-align: center;
 }
 
 /* 13열 숨김 */
@@ -140,18 +159,141 @@ body.disableScroll > .puyoGame{
 }
 
 
-.puyofield .playerpuyo .player-0 {
+.playerpuyo .player-0 {
     position: relative;
     top: 0px;
     left: 0px;
     border-radius: 100%;
 }
 
-.puyofield .playerpuyo .player-1 {
+.playerpuyo .player-1 {
     position: relative;
     top: 16px;
     left: -16px;
     border-radius: 100%;
+}
+
+.buttons {
+    text-align: center;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.config-wrapper {
+    text-align: center;
+    background: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(5px);
+    display: none;
+}
+
+.config {
+    display: inline-block;
+    text-align: left;
+    margin: 0 auto;
+    padding: 30px;
+    background: white;
+    border-radius: 5px;
+}
+
+.config button {
+    border: 1px solid #ddd;
+    padding: 10px 5px;
+    font-size: 0.8rem;
+    background: 0;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.config input[type="text"] {
+    border: 1px solid #ddd;
+    padding: 10px 5px;
+    font-size: 0.8rem;
+}
+
+.config select {
+    border: 1px solid #ddd;
+    padding: 10px 5px;
+    font-size: 0.8rem;
+}
+
+.option {
+    display: flex;
+    flex-direction: column;
+}
+
+.option h1 {
+    font-weight: normal;
+    font-size: 1rem;
+}
+
+.info-wrapper {
+    text-align: center;
+    background: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(5px);
+    display: none;
+}
+
+.info {
+    display: inline-block;
+    text-align: left;
+    margin: 0 auto;
+    padding: 30px;
+    background: white;
+    border-radius: 5px;
+}
+
+.info h1 {
+    font-size: 1.2rem;
+    margin: 0 0 10px;
+    padding: 5px;
+    background: black;
+    color: white;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.info h2 {
+    font-size: 1rem;
+    margin: 0 0 10px;
+}
+
+.info ul {
+    padding: 0;
+    margin: 0 0 10px;
+}
+
+.info ul:last-child {
+    margin-bottom: 0;
+}
+
+.info ul li {
+    list-style-position: inside;
+    margin-bottom: 5px;
+    font-size: 0.8rem;
+}
+
+.info ul li:last-child {
+    margin-bottom: 0;
 }
 
 details {

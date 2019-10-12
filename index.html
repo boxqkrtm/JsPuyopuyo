@@ -1,7 +1,8 @@
-<html>
-
+<!DOCTYPE html>
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
+    <title>JSPuyo</title>
     <!-- 스타일 -->
     <link rel="stylesheet" href="css/jspuyopuyo.css">
     <!-- 스크립트 -->
@@ -9,57 +10,136 @@
 </head>
 
 <body>
-    <div class="puyoGame" id="game1">
-        <div class="puyofield"></div>
-    </div>
-    <input class="puyoSeed" type="text">
-    <button class="seedApply">랜덤 시드 리셋&적용</button>
-    <br>
-    <details>
-        <summary>옵션</summary>
-        <br>시드값 저장소<br>
-        <select id="seedStorgae" onchange="if(this.value != 0){document.querySelectorAll('.puyoSeed')[0].value=this.value}if(this.value=='time'){document.querySelectorAll('.puyoSeed')[0].value=(new Date().getMonth().toString()+1)+''+new Date().getDate().toString()}">
-            <option>시드값을 선택해주세요</option>
-            <option value=time>오늘의 시드값</option>
-            <option value=6546>6546-allclear</option>
-        </select>
-        <br>
-        <br>색패 룰<br>
-        <select class="puyoBagOption">
-            <option value="pure">일반 4색 뿌요</option>
-            <option value="nextvoragarbage">넥스트가 only 보라색과 방해뿌요(미완성)</option>
-            <option value="nextaddgarbage">넥스트에 방해뿌요 추가(미완성)</option>
-        </select>
+<div class="puyogame" id="game1">
+    <div class="puyofield"></div>
+    <div class="gameinfo"></div>
+</div>
 
-        <br>
-        <br>소프트 드랍 딜레이(높을수록 느림)<br>
-        <select class="freefallSpeedOption">
-            <option value="3">3</option>
-            <option value="6" selected>6(기본값)</option>
-            <option value="10">10</option>
-            <option value="999999">999999</option>
-        </select>
-    </details>
-    <br>
-    <details>
-        <summary>배경 음악용 영상</summary>
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/3ZtXZQq6UMk?autoplay=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-    </details>
-    <br>
-    <details>
-        <summary>업데이트 예정 정보</summary>
-        -예정 기능 리스트-
-        찢기 딜레이 및 애니메이션, 싹쓸이 애니매이션, 점수, 연쇄수, 방해뿌요 연산
-        <br><br>
-        -예정 옵션 리스트-
-        다음 필요한 옵션기능: 색패 스킵, 색패 홀드, 소프트락 딜레이 조절, 드랍속도 조절, next 개수조절, 히스토리, 공유
-        <br><br>
-        -알려진 버그-
-        퀵턴기능 가로상태에서 됨
-        방해뿌요가 일반 뿌요처럼 터짐
-    </details>
-</body>
+<div class="buttons">
+    <a class="btn config-btn">옵션 열기</a>
+    <a class="btn music-btn">음악 켜기</a>
+    <a class="btn info-btn">정보 보기</a>
+</div>
+
+<div class="config-wrapper">
+    <div class="config">
+        <div class="option">
+            <input class="puyoSeed" type="text">
+            <button class="seedApply">랜덤 시드 리셋&적용</button>
+        </div>
+        <div class="option">
+            <h1>시드값 저장소</h1>
+            <select id="seedStorgae"
+                    onchange="if(this.value !== 0){document.querySelectorAll('.puyoSeed')[0].value=this.value}if(this.value=='time'){document.querySelectorAll('.puyoSeed')[0].value=(new Date().getMonth().toString()+1)+''+new Date().getDate().toString()}">
+                <option>시드값을 선택해주세요</option>
+                <option value=time>오늘의 시드값</option>
+                <option value=6546>6546-allclear</option>
+            </select>
+        </div>
+
+        <div class="option">
+            <h1>색패 룰</h1>
+            <select class="puyoBagOption">
+                <option value="pure">일반 4색 뿌요</option>
+                <option value="nextvoragarbage">넥스트가 only 보라색과 방해뿌요(미완성)</option>
+                <option value="nextaddgarbage">넥스트에 방해뿌요 추가(미완성)</option>
+            </select>
+        </div>
+
+        <div class="option">
+            <h1>소프트 드랍 딜레이(높을수록 느림)</h1>
+            <select class="freefallSpeedOption">
+                <option value="3">3</option>
+                <option value="6" selected>6(기본값)</option>
+                <option value="10">10</option>
+                <option value="999999">999999</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<div class="info-wrapper">
+    <div class="info">
+        <h1>업데이트 예정</h1>
+        <h2>기능</h2>
+        <ul>
+            <li>찢기 딜레이 및 애니메이션</li>
+            <li>싹쓸이 애니매이션</li>
+            <li>점수</li>
+            <li>연쇄수</li>
+            <li>방해뿌요 연산</li>
+        </ul>
+        <h2>옵션</h2>
+        <ul>
+            <li>색패 스킵</li>
+            <li>색패 홀드</li>
+            <li>소프트락 딜레이 조절</li>
+            <li>드랍속도 조절</li>
+            <li>next 개수조절</li>
+            <li>히스토리</li>
+            <li>공유</li>
+        </ul>
+
+        <h1>알려진 버그</h1>
+        <ul>
+            <li>퀵턴 기능 가로상태에서 됨</li>
+            <li>방해 뿌요가 일반 뿌요처럼 터짐</li>
+        </ul>
+    </div>
+</div>
+
 <!-- 스크립트 -->
+<script>
+    /**
+     *  설정 버튼
+     */
+
+    $(".config-btn").on("click", function () {
+        $(".config-wrapper").css("display", "flex");
+    });
+
+    $(".config-wrapper").on("click", function (e) {
+        if (e.target === this) {
+            $(".config-wrapper").css("display", "none");
+        }
+    });
+
+    let musicOn = false;
+    let musicElem = null;
+
+    /**
+     *  음악 토글
+     */
+
+    $(".music-btn").on("click", function () {
+        if (!musicOn) {
+            musicElem = $(`<iframe width="0" height="0" src="https://www.youtube.com/embed/3ZtXZQq6UMk?autoplay=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`);
+            musicElem.appendTo($('html'));
+            $(".music-btn").text("음악 끄기");
+        } else {
+            musicElem.remove();
+            $(".music-btn").text("음악 켜기");
+        }
+
+        musicOn = !musicOn;
+    });
+
+    /**
+     * 정보 버튼
+     */
+
+    $(".info-btn").on("click", function () {
+        $(".info-wrapper").css("display", "flex");
+    });
+
+    $(".info-wrapper").on("click", function (e) {
+        if (e.target === this) {
+            $(".info-wrapper").css("display", "none");
+        }
+    });
+</script>
 <script src="js/jspuyopuyo.js"></script>
+
+</body>
 
 </html>

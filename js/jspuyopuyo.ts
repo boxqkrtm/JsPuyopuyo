@@ -26,7 +26,7 @@ let connectCount;
 let colorCount;
 let rightspinfail;
 let leftspinfail;
-let colorBonusTable = [0, 0, 3, 6, 12, 24]
+let colorBonusTable = [0, 0, 3, 6, 12, 24];
 let rensaBonusTable = [0, 0, 8, 16, 32, 64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448, 480, 512];
 let connectBonusTable = [0, 0, 0, 0, 0, 2, 3, 4, 5, 6, 7, 10];
 let randomSeed;
@@ -37,24 +37,24 @@ let freefallspeed;
 //리소스 지정
 //wip
 
-function hasClass(ele,cls) {
-    return !!ele.className.match(new RegExp('(\\s|^)'+cls+'(\\s|$)'));
-  }
-  
-  function addClass(ele,cls) {
-    if (!hasClass(ele,cls)) ele.className += " "+cls;
-  }
-  
-  function removeClass(ele,cls) {
-    if (hasClass(ele,cls)) {
-      var reg = new RegExp('(\\s|^)'+cls+'(\\s|$)');
-      ele.className=ele.className.replace(reg,' ');
+function hasClass(ele, cls) {
+    return !!ele.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
+}
+
+function addClass(ele, cls) {
+    if (!hasClass(ele, cls)) ele.className += " " + cls;
+}
+
+function removeClass(ele, cls) {
+    if (hasClass(ele, cls)) {
+        var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
+        ele.className = ele.className.replace(reg, ' ');
     }
-  }
+}
 
 //숫자+문자를 시드값으로 변환
 function readSeedInput() {
-    if ( (<HTMLInputElement>document.querySelector(".puyoSeed")).value == "") {
+    if ((<HTMLInputElement>document.querySelector(".puyoSeed")).value == "") {
         (<HTMLInputElement>document.querySelector(".puyoSeed")).value = "" + (Math.round(Math.random() * 65535));
     }
     let inputseed = (<HTMLInputElement>document.querySelector(".puyoSeed")).value;
@@ -78,14 +78,18 @@ $(".seedApply").click(function () {
     initGame();
 });
 
+/*
+
 //게임 클릭 시 스크롤방지
-let puyogameElem = (<HTMLDivElement>document.querySelector(".puyogame"))
-puyogameElem.onmouseover = function(){
-    addClass(<HTMLBodyElement>document.querySelector("body"),"disableScroll");
-}
-puyogameElem.onmouseout = function(){
-    removeClass(<HTMLBodyElement>document.querySelector("body"),"disableScroll");
-}
+let puyogameElem = (<HTMLDivElement>document.querySelector(".puyogame"));
+puyogameElem.onmouseover = function () {
+    addClass(<HTMLBodyElement>document.querySelector("body"), "disableScroll");
+};
+puyogameElem.onmouseout = function () {
+    removeClass(<HTMLBodyElement>document.querySelector("body"), "disableScroll");
+};
+
+ */
 
 
 //뿌요 색상 클래스 지정
@@ -125,7 +129,7 @@ function renderScreen() {
     for (let i = 0; i < 13; i++) {
         for (let j = 0; j < 6; j++) {
             let object = $(".puyo.arr" + i + "-" + j);
-            setPuyoColorClass(gamefield[i][j], object)
+            setPuyoColorClass(gamefield[i][j], object);
         }
 
     }
@@ -161,7 +165,7 @@ function initGame() {
         let sethtml = "";
         //기본 필드 생성
         for (let i = 0; i < 13; i++) {
-            sethtml += "<div>"
+            sethtml += "<div class='puyoline'>";
             for (let j = 0; j < 6; j++) {
                 sethtml += "<div class='puyo " + "arr" + i + "-" + j + "'></div>";
             }
@@ -174,14 +178,19 @@ function initGame() {
         sethtml += "<div class='puyo player-1'></div>";
         sethtml += "</div>";
 
+        let infoHtml = "<div class='title'>NEXT</div>";
+
+        infoHtml += "<div class='nextgrid'>";
         //넥스트 뿌요 생성
         for (let i = 0; i < 4; i++) {
-            sethtml += "<div class='puyo nextpuyo next-" + i + "'>"
+            infoHtml += "<div class='puyo nextpuyo next-" + i + "'></div>";
         }
-        sethtml += "</div></div></div></div>";
-        sethtml += "<div class='score'></div>";
-        sethtml += "<div class='rensa'></div>";
+        infoHtml += "</div><div class='title'>점수</div>";
+        infoHtml += "<div class='score'></div>";
+        infoHtml += "<div class='title'>연쇄</div>";
+        infoHtml += "<div class='rensa'></div>";
         $(".puyogame .puyofield").html(sethtml);
+        $(".puyogame .gameinfo").html(infoHtml);
     }
 
     //create html elements for game
@@ -191,8 +200,8 @@ function initGame() {
     randomSeed = readSeedInput();
 
     //set editable value
-    freefallspeed=parseInt((<HTMLOptionElement>document.querySelector(".freefallSpeedOption")).value);
-    deltaframe=freefallspeed;//초기 뿌요는 즉시나오기 위해 설정된 프레임값임
+    freefallspeed = parseInt((<HTMLOptionElement>document.querySelector(".freefallSpeedOption")).value);
+    deltaframe = freefallspeed;//초기 뿌요는 즉시나오기 위해 설정된 프레임값임
 
     //reset letiable
     gamefield = new Array(new Array(6), new Array(6), new Array(6), new Array(6), new Array(6), new Array(6), new Array(6), new Array(6), new Array(6), new Array(6), new Array(6), new Array(6), new Array(6));
@@ -316,9 +325,9 @@ function initGame() {
 }
 
 //키 리스너
-onkeydown = onkeyup = function (e : KeyboardEvent) {
+onkeydown = onkeyup = function (e: KeyboardEvent) {
     keymap[e.keyCode] = e.type == 'keydown';
-}
+};
 
 //루프될 게임 1프레임 함수
 function game() {
@@ -369,13 +378,13 @@ function game() {
                     if (poplist.length >= 4) {
                         connectCount = poplist.length;
                         ispopstate = 1;
-                        let colortable : Number[] = [0, 0, 0, 0, 0, 0, 0];
+                        let colortable: Number[] = [0, 0, 0, 0, 0, 0, 0];
                         poplist.forEach(function (p) {
                             gamefield[p.y + 1][p.x] = 0;
                             colortable[p.c] = 1;
                             colorCount = 0;
                             for (let i = 1; i < 6; i++) {
-                                if (colortable[i] == 1){
+                                if (colortable[i] == 1) {
                                     colorCount++;
                                 }
                             }
@@ -384,9 +393,6 @@ function game() {
                 }
             }
         }
-
-
-
 
         return ispopstate;
     }
@@ -403,7 +409,7 @@ function game() {
                         poplist.push({
                             y: ny,
                             x: nx,
-                            c: gamefield[ny + 1][nx]
+                            c: gamefield[ny + 1][nx],
                         });
                         visited[ny + 1][nx] = 1;
                         dfs(ny, nx, ch);
@@ -544,15 +550,15 @@ function game() {
                     break;
                 case 1: //ㅡ자 오른회전
                     for (let i = 0; i < 14; i++) {
-                        if(i==13){
+                        if (i == 13) {
                             //13열 위에서 놓았을 때
-                            if(gamefield[0][puyox / 16] ==0){
+                            if (gamefield[0][puyox / 16] == 0) {
                                 gamefield[0][puyox / 16] = puyobag[puyobagIndex - 1];
                             }
-                            if(gamefield[0][(puyox / 16) + 1] ==0){
+                            if (gamefield[0][(puyox / 16) + 1] == 0) {
                                 gamefield[0][(puyox / 16) + 1] = puyobag[puyobagIndex - 2];
                             }
-                        }else{
+                        } else {
                             if (gamefield[12 - i][puyox / 16] == 0 && gamefield[12 - i][(puyox / 16) + 1] == 0) {
                                 //이미 필드에뿌요 없으면 뿌요 설치
                                 gamefield[12 - i][puyox / 16] = puyobag[puyobagIndex - 1];
@@ -576,11 +582,15 @@ function game() {
                     break;
                 case 3: //ㅡ자 왼쪽회전
                     for (let i = 0; i < 14; i++) {
-                        if(i==13){
+                        if (i == 13) {
                             //13열 위에서 놓았을 때\
-                            if (gamefield[0][puyox / 16] == 0) { gamefield[0][puyox / 16] = puyobag[puyobagIndex - 1];}
-                            if (gamefield[0][(puyox / 16) - 1] == 0) {gamefield[0][(puyox / 16) - 1] = puyobag[puyobagIndex - 2];}
-                        }else{
+                            if (gamefield[0][puyox / 16] == 0) {
+                                gamefield[0][puyox / 16] = puyobag[puyobagIndex - 1];
+                            }
+                            if (gamefield[0][(puyox / 16) - 1] == 0) {
+                                gamefield[0][(puyox / 16) - 1] = puyobag[puyobagIndex - 2];
+                            }
+                        } else {
                             if (gamefield[12 - i][puyox / 16] == 0 && gamefield[12 - i][(puyox / 16) - 1] == 0) {
                                 //이미 필드에뿌요 없으면 뿌요 설치
                                 gamefield[12 - i][puyox / 16] = puyobag[puyobagIndex - 1];
