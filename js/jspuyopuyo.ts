@@ -122,8 +122,6 @@ $(".puyoScreenScale").change(function(){
     }
 });
 
-
-
 //숫자+문자를 시드값으로 변환
 function readSeedInput() {
     if ((<HTMLInputElement>document.querySelector(".puyoSeed")).value == "") {
@@ -735,7 +733,7 @@ function game() {
             }
 
             //퀵턴
-            if (keymap["88"] == true && puyocollide[1] == 1 && puyocollide[3] == 1 && puyospindelay <= 0) {
+            if ( (puyorread(puyor)==0||puyorread(puyor)==2) && keymap["88"] == true && puyocollide[1] == 1 && puyocollide[3] == 1 && puyospindelay <= 0) {
                 //우측 퀵턴
                 if (rightspinfail >= 0.5) {
                     puyor += 2;
@@ -745,7 +743,7 @@ function game() {
                 } else {
                     rightspinfail += 10;
                 }
-            } else if (keymap["90"] == true && puyocollide[1] == 1 && puyocollide[3] == 1 && puyospindelay <= 0) {
+            } else if ( (puyorread(puyor)==0||puyorread(puyor)==2) && keymap["90"] == true && puyocollide[1] == 1 && puyocollide[3] == 1 && puyospindelay <= 0) {
                 //좌측 퀵턴
                 if (leftspinfail >= 0.5) {
                     puyor -= 2;
@@ -757,12 +755,12 @@ function game() {
                 }
             }
 
-            //뿌요 회전
-            if (keymap["90"] == true && puyospindelay <= 0 && (!(puyocollide[1] == 1 && puyocollide[3] == 1))) {
+            //뿌요 회전 (좌우가 막혔을 떄 가로상태에서는 회전가능)
+            if (keymap["90"] == true && puyospindelay <= 0 && (!(puyocollide[1] == 1 && puyocollide[3] == 1) || (puyorread(puyor)==1||puyorread(puyor)==3))) {
                 //좌회전
                 puyor -= 1;
                 puyospindelay = 1;
-            } else if (keymap["88"] == true && puyospindelay <= 0 && (!(puyocollide[1] == 1 && puyocollide[3] == 1))) {
+            } else if (keymap["88"] == true && puyospindelay <= 0 && (!(puyocollide[1] == 1 && puyocollide[3] == 1) || (puyorread(puyor)==1||puyorread(puyor)==3))) {
                 //우회전
                 puyor += 1;
                 puyospindelay = 1;
