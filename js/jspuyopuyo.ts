@@ -100,7 +100,7 @@ $(".info-wrapper").on("click", function (e) {
  */
 
 //시드 보관함 적용
-$(".seedStorage").change(function(){
+$("#seedStorage").change(function(){
     if($(this).val() !== 0){
         $(".puyoSeed").val($(this).val());
     }if($(this).val()=='time'){

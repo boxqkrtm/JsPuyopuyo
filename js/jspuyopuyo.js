@@ -87,7 +87,7 @@ $(".info-wrapper").on("click", function (e) {
  * 2차 버튼/옵션 ( 2 depth )
  */
 //시드 보관함 적용
-$(".seedStorage").change(function () {
+$("#seedStorage").change(function () {
     if ($(this).val() !== 0) {
         $(".puyoSeed").val($(this).val());
     }
