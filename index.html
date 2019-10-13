@@ -10,7 +10,7 @@
 </head>
 
 <body>
-<div class="puyogame" id="game1">
+<div class="puyogame scale20" id="game1">
     <div class="puyofield"></div>
     <div class="gameinfo"></div>
 </div>
@@ -25,15 +25,16 @@
     <div class="config">
         <div class="option">
             <input class="puyoSeed" type="text">
-            <button class="seedApply">랜덤 시드 리셋&적용</button>
+            <button class="seedApply">리셋 및 적용</button>
         </div>
+
         <div class="option">
             <h1>시드값 저장소</h1>
-            <select id="seedStorgae"
-                    onchange="if(this.value !== 0){document.querySelectorAll('.puyoSeed')[0].value=this.value}if(this.value=='time'){document.querySelectorAll('.puyoSeed')[0].value=(new Date().getMonth().toString()+1)+''+new Date().getDate().toString()}">
+            <select id="seedStorage">
                 <option>시드값을 선택해주세요</option>
                 <option value=time>오늘의 시드값</option>
                 <option value=6546>6546-allclear</option>
+                <option value=64074>64074-많은 쯔모</option>
             </select>
         </div>
 
@@ -43,6 +44,14 @@
                 <option value="pure">일반 4색 뿌요</option>
                 <option value="nextvoragarbage">넥스트가 only 보라색과 방해뿌요(미완성)</option>
                 <option value="nextaddgarbage">넥스트에 방해뿌요 추가(미완성)</option>
+            </select>
+        </div>
+
+        <div class="option">
+            <h1>화면 스케일</h1>
+            <select class="puyoScreenScale">
+                <option value="10">1x</option>
+                <option value="20" selected>2x</option>
             </select>
         </div>
 
@@ -90,56 +99,9 @@
 
 <!-- 스크립트 -->
 <script>
-    /**
-     *  설정 버튼
-     */
 
-    $(".config-btn").on("click", function () {
-        $(".config-wrapper").css("display", "flex");
-    });
-
-    $(".config-wrapper").on("click", function (e) {
-        if (e.target === this) {
-            $(".config-wrapper").css("display", "none");
-        }
-    });
-
-    let musicOn = false;
-    let musicElem = null;
-
-    /**
-     *  음악 토글
-     */
-
-    $(".music-btn").on("click", function () {
-        if (!musicOn) {
-            musicElem = $(`<iframe width="0" height="0" src="https://www.youtube.com/embed/3ZtXZQq6UMk?autoplay=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`);
-            musicElem.appendTo($('html'));
-            $(".music-btn").text("음악 끄기");
-        } else {
-            musicElem.remove();
-            $(".music-btn").text("음악 켜기");
-        }
-
-        musicOn = !musicOn;
-    });
-
-    /**
-     * 정보 버튼
-     */
-
-    $(".info-btn").on("click", function () {
-        $(".info-wrapper").css("display", "flex");
-    });
-
-    $(".info-wrapper").on("click", function (e) {
-        if (e.target === this) {
-            $(".info-wrapper").css("display", "none");
-        }
-    });
 </script>
 <script src="js/jspuyopuyo.js"></script>
-
 </body>
 
 </html>

@@ -1,14 +1,35 @@
 body {
     margin: 0;
+    overflow:hidden;
+}
+
+.clear{
+    clear: both;
+}
+
+.bar10px{
+    padding: 10px;
+    width: 100%;
+}
+
+.bar50px{
+    padding: 50px;
+    width: 100%;
 }
 
 .puyogame {
     opacity: 1;
     display: flex;
     justify-content: center;
-    padding: 100px 0;
+    padding: 20px 0;
     border-bottom: 1px solid #ddd;
     margin-bottom: 20px;
+}
+
+.puyogame.scale20 {
+    padding: 90px 0 15px 0;
+    transform: scale(2);
+    margin-bottom: 188px;
 }
 
 .puyofield {
@@ -17,6 +38,8 @@ body {
 }
 
 .puyoline {
+    width: calc(16px * 6);
+    height: 16px;
 }
 
 .puyo {
@@ -33,50 +56,34 @@ body {
 }
 
 .puyo.red {
-    width: 16px;
-    height: 16px;
-    display: inline-block;
     background: red;
 }
 
 .puyo.blue {
-    width: 16px;
-    height: 16px;
-    display: inline-block;
     background: blue;
 }
 
 .puyo.green {
-    width: 16px;
-    height: 16px;
-    display: inline-block;
     background: green;
 }
 
 .puyo.yellow {
-    width: 16px;
-    height: 16px;
-    display: inline-block;
     background: yellow;
 }
 
 .puyo.purple {
-    width: 16px;
-    height: 16px;
-    display: inline-block;
     background: purple;
 }
 
 .puyo.garbage {
-    width: 16px;
-    height: 16px;
-    display: inline-block;
     background: #d4d4d4;
 }
 
 .playerpuyo {
     position: absolute;
     white-space: nowrap;
+    width: 16px;
+    height: 32px;
 }
 
 .gameinfo {
@@ -197,6 +204,8 @@ body {
     justify-content: center;
     backdrop-filter: blur(5px);
     display: none;
+    transition: 0.2s all ease;
+    opacity: 1;
 }
 
 .config {
