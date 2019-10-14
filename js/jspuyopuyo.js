@@ -83,6 +83,10 @@ $(".info-wrapper").on("click", function (e) {
         $(".info-wrapper").css("display", "none");
     }
 });
+//빠른 리셋 버튼
+$(".reset-btn").on("click", function () {
+    $(".seedApply").click();
+});
 /**
  * 2차 버튼/옵션 ( 2 depth )
  */
@@ -107,6 +111,10 @@ $(".puyoScreenScale").change(function () {
             defalut: break;
     }
 });
+//시드값 적용 버튼(실제로는 게임 리셋)
+$(".seedApply").click(function () {
+    initGame();
+});
 //숫자+문자를 시드값으로 변환
 function readSeedInput() {
     if (document.querySelector(".puyoSeed").value == "") {
@@ -126,10 +134,6 @@ function rand() {
     var x = Math.sin(randomSeed++) * 10000;
     return x - Math.floor(x);
 }
-//시드값 적용 버튼(실제로는 게임 리셋)
-$(".seedApply").click(function () {
-    initGame();
-});
 /*
 
 //게임 클릭 시 스크롤방지
