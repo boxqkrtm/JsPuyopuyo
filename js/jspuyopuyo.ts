@@ -317,7 +317,7 @@ function initGame() {
     updateGameFieldHeight();
 
     //set puyotable
-    let temprand = Math.round(rand() * 5);
+    let temprand = Math.round(rand() * 4)+1;//1~5
     switch ($(".puyoBagOption").val()) {
         case "pure": //노멀 4색 뿌요
             puyotable[1] = 64;
