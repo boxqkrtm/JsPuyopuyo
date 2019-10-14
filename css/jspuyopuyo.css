@@ -84,6 +84,8 @@ body {
     white-space: nowrap;
     width: 16px;
     height: 32px;
+    transition: left 0.05s ease, transform 0.08s linear;
+    transform-origin: 8px 25px;
 }
 
 .gameinfo {

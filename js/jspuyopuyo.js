@@ -30,6 +30,7 @@ let colorBonusTable = [0, 0, 3, 6, 12, 24];
 let rensaBonusTable = [0, 0, 8, 16, 32, 64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448, 480, 512];
 let connectBonusTable = [0, 0, 0, 0, 0, 2, 3, 4, 5, 6, 7, 10];
 let randomSeed;
+let PuyoPlayMode;
 //옵션을 위한 변수
 let freefallspeed;
 //리소스 지정
@@ -46,6 +47,25 @@ function removeClass(ele, cls) {
         var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
         ele.className = ele.className.replace(reg, ' ');
     }
+}
+//숫자+문자를 시드값으로 변환
+function readSeedInput() {
+    if (document.querySelector(".puyoSeed").value == "") {
+        document.querySelector(".puyoSeed").value = "" + (Math.round(Math.random() * 65535));
+    }
+    let inputseed = document.querySelector(".puyoSeed").value;
+    let output = 0;
+    for (let i = 0; i < inputseed.length; i++) {
+        output += inputseed.charCodeAt(i) * Math.pow(10, i);
+    }
+    output %= 65535;
+    return output;
+}
+//시드와 sin기반 랜덤함수
+function rand() {
+    //랜덤 시드값 숫자로 변환 후 반환
+    let x = Math.sin(randomSeed++) * 10000;
+    return x - Math.floor(x);
 }
 /**
  *  1차 버튼 ( 1 depth )
@@ -85,7 +105,7 @@ $(".info-wrapper").on("click", function (e) {
 });
 //빠른 리셋 버튼
 $(".reset-btn").on("click", function () {
-    initGame();
+    $(".seedApply").click();
 });
 /**
  * 2차 버튼/옵션 ( 2 depth )
@@ -115,25 +135,6 @@ $(".puyoScreenScale").change(function () {
 $(".seedApply").click(function () {
     initGame();
 });
-//숫자+문자를 시드값으로 변환
-function readSeedInput() {
-    if (document.querySelector(".puyoSeed").value == "") {
-        document.querySelector(".puyoSeed").value = "" + (Math.round(Math.random() * 65535));
-    }
-    let inputseed = document.querySelector(".puyoSeed").value;
-    let output = 0;
-    for (let i = 0; i < inputseed.length; i++) {
-        output += inputseed.charCodeAt(i) * Math.pow(10, i);
-    }
-    output %= 65535;
-    return output;
-}
-//시드와 sin기반 랜덤함수
-function rand() {
-    //랜덤 시드값 숫자로 변환 후 반환
-    let x = Math.sin(randomSeed++) * 10000;
-    return x - Math.floor(x);
-}
 /*
 
 //게임 클릭 시 스크롤방지
@@ -238,14 +239,42 @@ function initGame() {
         infoHtml += "<div class='rensa'></div>";
         $(".puyogame .puyofield").html(sethtml);
         $(".puyogame .gameinfo").html(infoHtml);
+        switch ($(".playOption").val()) {
+            case "play":
+                PuyoPlayMode = 0;
+                break;
+            case "edit":
+                PuyoPlayMode = 1;
+                break;
+        }
+        //뿌요 에디터
+        $("#game1 .puyoline > .puyo").on("mouseover", (function () {
+            if (PuyoPlayMode == 1) {
+                let a;
+                let b;
+                a = $(this).attr("class").split(" ")[1].split("arr")[1].split("-")[0];
+                b = $(this).attr("class").split(" ")[1].split("arr")[1].split("-")[1];
+                if (keymap[48] == 1)
+                    gamefield[a][b] = 0;
+                if (keymap[49] == 1)
+                    gamefield[a][b] = 1;
+                if (keymap[50] == 1)
+                    gamefield[a][b] = 2;
+                if (keymap[51] == 1)
+                    gamefield[a][b] = 3;
+                if (keymap[52] == 1)
+                    gamefield[a][b] = 4;
+                if (keymap[53] == 1)
+                    gamefield[a][b] = 5;
+                if (keymap[54] == 1)
+                    gamefield[a][b] = 6;
+                renderScreen();
+                updateGameFieldHeight();
+            }
+        }));
+        document.querySelector(".score").textContent = puyoScore;
+        document.querySelector(".rensa").textContent = rensa + "연쇄";
     }
-    //create html elements for game
-    drawGameElements();
-    //get random
-    randomSeed = readSeedInput();
-    //set editable value
-    freefallspeed = parseInt(document.querySelector(".freefallSpeedOption").value);
-    deltaframe = freefallspeed; //초기 뿌요는 즉시나오기 위해 설정된 프레임값임
     //reset letiable
     gamefield = new Array(new Array(6), new Array(6), new Array(6), new Array(6), new Array(6), new Array(6), new Array(6), new Array(6), new Array(6), new Array(6), new Array(6), new Array(6), new Array(6));
     gamefieldheight = new Array(6);
@@ -274,12 +303,19 @@ function initGame() {
     colorCount = 0;
     rightspinfail = 0;
     leftspinfail = 0;
-    $(".puyofield .playerpuyo").css("transition", "left 0.08s ease, transform 0.1s linear");
-    $(".puyofield .playerpuyo").css("transform-origin", "8px 25px");
+    rensa = 0;
+    //create html elements for game
+    drawGameElements();
+    //get random
+    randomSeed = readSeedInput();
+    //set editable value
+    freefallspeed = parseInt(document.querySelector(".freefallSpeedOption").value);
+    deltaframe = freefallspeed; //초기 뿌요는 즉시나오기 위해 설정된 프레임값임
     //reset field
     for (let i = 0; i < 13; i++) {
         for (let j = 0; j < 6; j++) {
-            gamefield[i][j] = 0;
+            gamefield[i][j] = parseInt($(".presetOption").val().toString().charAt(i * 6 + j));
+            console.log($(".presetOption").val().toString().charAt(i * 6 + j));
             poptable[i][j] = 0;
             gamefieldheight[j] = 0;
         }
@@ -388,10 +424,6 @@ function game() {
             puyor = 4 + puyor % 4;
         return puyor % 4;
     }
-    function VisitPoint() {
-        let x;
-        let y;
-    }
     //뿌요 필드 탐색 a=y축,b=x축
     let visited;
     let poplist;
@@ -473,10 +505,6 @@ function game() {
             //왼쪽 바라봄
             puyoh = (puyoy + 32) / 16;
             break;
-    }
-    if (keymap["115"] == true){
-        //F4로 리스타트
-        initGame();
     }
     deltaframe++;
     if (ispop == 0) {
@@ -750,7 +778,7 @@ function game() {
             ispopstateend = explorefield();
             if (ispopstateend == 1) {
                 rensa++;
-                let bonustmp = (rensaBonusTable[rensa] + connectBonusTable[connectCount] + colorBonusTable[colorCount]);
+                let bonustmp = (rensaBonusTable[rensa] + connectBonusTable[connectCount > 11 ? 11 : connectCount] + colorBonusTable[colorCount]);
                 if (bonustmp == 0)
                     bonustmp = 1;
                 puyoScore += connectCount * bonustmp * 10;
