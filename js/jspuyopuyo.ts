@@ -828,7 +828,6 @@ function game() {
                 }
             }
 
-
             //터진상태 렌더링
             renderScreen();
             //뿌요 터짐 종료 일반모드로 전환
@@ -857,7 +856,6 @@ function game() {
                     new Audio("/resource/puyo/allclear.ogg").play();
                     puyoScore += 2100;
                     document.querySelector(".score").textContent = puyoScore;
-
                 }
             }
             deltaframe = 0;
