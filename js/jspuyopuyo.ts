@@ -100,7 +100,6 @@ $(".reset-btn").on("click", function () {
     $(".seedApply").click();
 });
 
-
 /**
  * 2차 버튼/옵션 ( 2 depth )
  */

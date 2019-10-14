@@ -1,37 +1,37 @@
 //글로벌 변수 지정
-var gamefield;
-var gamefieldheight;
-var puyobag;
-var puyotable;
-var puyobagIndex;
-var poptable;
-var deltaframe; //for droppuyo
-var droppuyo;
-var startdroppuyo;
-var droppuyotimer;
-var puyox;
-var puyoy;
-var puyor;
-var puyoh;
-var puyovertmovedelay;
-var puyodas;
-var puyospindelay;
-var puyocollide;
-var ispop;
-var keymap = []; // 키 리스너 입력 배열
-var ispopstateend;
-var rensa;
-var puyoScore;
-var connectCount;
-var colorCount;
-var rightspinfail;
-var leftspinfail;
-var colorBonusTable = [0, 0, 3, 6, 12, 24];
-var rensaBonusTable = [0, 0, 8, 16, 32, 64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448, 480, 512];
-var connectBonusTable = [0, 0, 0, 0, 0, 2, 3, 4, 5, 6, 7, 10];
-var randomSeed;
+let gamefield;
+let gamefieldheight;
+let puyobag;
+let puyotable;
+let puyobagIndex;
+let poptable;
+let deltaframe; //for droppuyo
+let droppuyo;
+let startdroppuyo;
+let droppuyotimer;
+let puyox;
+let puyoy;
+let puyor;
+let puyoh;
+let puyovertmovedelay;
+let puyodas;
+let puyospindelay;
+let puyocollide;
+let ispop;
+let keymap = []; // 키 리스너 입력 배열
+let ispopstateend;
+let rensa;
+let puyoScore;
+let connectCount;
+let colorCount;
+let rightspinfail;
+let leftspinfail;
+let colorBonusTable = [0, 0, 3, 6, 12, 24];
+let rensaBonusTable = [0, 0, 8, 16, 32, 64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448, 480, 512];
+let connectBonusTable = [0, 0, 0, 0, 0, 2, 3, 4, 5, 6, 7, 10];
+let randomSeed;
 //옵션을 위한 변수
-var freefallspeed;
+let freefallspeed;
 //리소스 지정
 //wip
 function hasClass(ele, cls) {
@@ -59,12 +59,12 @@ $(".config-wrapper").on("click", function (e) {
         $(".config-wrapper").css("display", "none");
     }
 });
-var musicOn = false;
-var musicElem = null;
+let musicOn = false;
+let musicElem = null;
 //음악 토글버튼
 $(".music-btn").on("click", function () {
     if (!musicOn) {
-        musicElem = $("<iframe width=\"0\" height=\"0\" src=\"https://www.youtube.com/embed/3ZtXZQq6UMk?autoplay=1\" frameborder=\"0\" allow=\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>");
+        musicElem = $(`<iframe width="0" height="0" src="https://www.youtube.com/embed/3ZtXZQq6UMk?autoplay=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`);
         musicElem.appendTo($('html'));
         $(".music-btn").text("음악 끄기");
     }
@@ -85,7 +85,7 @@ $(".info-wrapper").on("click", function (e) {
 });
 //빠른 리셋 버튼
 $(".reset-btn").on("click", function () {
-    $(".seedApply").click();
+    initGame();
 });
 /**
  * 2차 버튼/옵션 ( 2 depth )
@@ -120,9 +120,9 @@ function readSeedInput() {
     if (document.querySelector(".puyoSeed").value == "") {
         document.querySelector(".puyoSeed").value = "" + (Math.round(Math.random() * 65535));
     }
-    var inputseed = document.querySelector(".puyoSeed").value;
-    var output = 0;
-    for (var i = 0; i < inputseed.length; i++) {
+    let inputseed = document.querySelector(".puyoSeed").value;
+    let output = 0;
+    for (let i = 0; i < inputseed.length; i++) {
         output += inputseed.charCodeAt(i) * Math.pow(10, i);
     }
     output %= 65535;
@@ -131,7 +131,7 @@ function readSeedInput() {
 //시드와 sin기반 랜덤함수
 function rand() {
     //랜덤 시드값 숫자로 변환 후 반환
-    var x = Math.sin(randomSeed++) * 10000;
+    let x = Math.sin(randomSeed++) * 10000;
     return x - Math.floor(x);
 }
 /*
@@ -179,9 +179,9 @@ function setPuyoColorClass(color, object) {
 }
 //필드 화면 렌더링
 function renderScreen() {
-    for (var i = 0; i < 13; i++) {
-        for (var j = 0; j < 6; j++) {
-            var object = $(".puyo.arr" + i + "-" + j);
+    for (let i = 0; i < 13; i++) {
+        for (let j = 0; j < 6; j++) {
+            let object = $(".puyo.arr" + i + "-" + j);
             setPuyoColorClass(gamefield[i][j], object);
         }
     }
@@ -196,8 +196,8 @@ function renderScreen() {
 }
 //게임필드 높이 업데이트 함수
 function updateGameFieldHeight() {
-    for (var i = 0; i < 6; i++) {
-        for (var j = 0; j < 13; j++) {
+    for (let i = 0; i < 6; i++) {
+        for (let j = 0; j < 13; j++) {
             gamefieldheight[i] = 13;
             if (gamefield[j][i] != 0) {
                 //바닥12, 천장0
@@ -212,11 +212,11 @@ function updateGameFieldHeight() {
 function initGame() {
     //필드 html 요소 생성
     function drawGameElements() {
-        var sethtml = "";
+        let sethtml = "";
         //기본 필드 생성
-        for (var i = 0; i < 13; i++) {
+        for (let i = 0; i < 13; i++) {
             sethtml += "<div class='puyoline'>";
-            for (var j = 0; j < 6; j++) {
+            for (let j = 0; j < 6; j++) {
                 sethtml += "<div class='puyo " + "arr" + i + "-" + j + "'></div>";
             }
             sethtml += "</div>";
@@ -226,10 +226,10 @@ function initGame() {
         sethtml += "<div class='puyo player-0'></div>";
         sethtml += "<div class='puyo player-1'></div>";
         sethtml += "</div>";
-        var infoHtml = "<div class='title'>NEXT</div>";
+        let infoHtml = "<div class='title'>NEXT</div>";
         infoHtml += "<div class='nextgrid'>";
         //넥스트 뿌요 생성
-        for (var i = 0; i < 4; i++) {
+        for (let i = 0; i < 4; i++) {
             infoHtml += "<div class='puyo nextpuyo next-" + i + "'></div>";
         }
         infoHtml += "</div><div class='title'>점수</div>";
@@ -277,8 +277,8 @@ function initGame() {
     $(".puyofield .playerpuyo").css("transition", "left 0.08s ease, transform 0.1s linear");
     $(".puyofield .playerpuyo").css("transform-origin", "8px 25px");
     //reset field
-    for (var i = 0; i < 13; i++) {
-        for (var j = 0; j < 6; j++) {
+    for (let i = 0; i < 13; i++) {
+        for (let j = 0; j < 6; j++) {
             gamefield[i][j] = 0;
             poptable[i][j] = 0;
             gamefieldheight[j] = 0;
@@ -287,7 +287,7 @@ function initGame() {
     //필드 높이 저장
     updateGameFieldHeight();
     //set puyotable
-    var temprand = Math.round(rand() * 4) + 1; //1~5
+    let temprand = Math.round(rand() * 4) + 1; //1~5
     switch ($(".puyoBagOption").val()) {
         case "pure": //노멀 4색 뿌요
             puyotable[1] = 64;
@@ -320,8 +320,8 @@ function initGame() {
             break;
     }
     //set puyo in bag
-    for (var remain256 = 256; remain256 > 0; remain256--) {
-        var randtemp = Math.round(rand() * 7);
+    for (let remain256 = 256; remain256 > 0; remain256--) {
+        let randtemp = Math.round(rand() * 7);
         if (puyotable[randtemp] > 0) {
             puyobag[256 - remain256] = randtemp;
             puyotable[randtemp]--;
@@ -331,9 +331,9 @@ function initGame() {
         }
     }
     //set puyo in bag 초반 2수 3색 보정
-    for (var i = 4; i < 256; i++) {
-        var tmp = 0;
-        var puyochecker = new Array(7);
+    for (let i = 4; i < 256; i++) {
+        let tmp = 0;
+        let puyochecker = new Array(7);
         //초반 4수의 색 읽음
         puyochecker[0] = 0;
         puyochecker[1] = 0;
@@ -347,7 +347,7 @@ function initGame() {
         puyochecker[puyobag[2]] = 1;
         puyochecker[puyobag[3]] = 1;
         //색의 수를 계산
-        for (var j = 0; j < 7; j++) {
+        for (let j = 0; j < 7; j++) {
             tmp += puyochecker[j];
         }
         if (tmp < 4) {
@@ -371,9 +371,9 @@ onkeydown = onkeyup = function (e) {
 function game() {
     //뿌요 중력 실행
     function puyoapplygravity() {
-        for (var k = 0; k < 12; k++) {
-            for (var i = 0; i < 12; i++) {
-                for (var j = 0; j < 6; j++) {
+        for (let k = 0; k < 12; k++) {
+            for (let i = 0; i < 12; i++) {
+                for (let j = 0; j < 6; j++) {
                     if (gamefield[i][j] != 0 && gamefield[i + 1][j] == 0) {
                         gamefield[i + 1][j] = gamefield[i][j];
                         gamefield[i][j] = 0;
@@ -389,62 +389,59 @@ function game() {
         return puyor % 4;
     }
     function VisitPoint() {
-        var x;
-        var y;
+        let x;
+        let y;
     }
     //뿌요 필드 탐색 a=y축,b=x축
-    var visited;
-    var poplist;
+    let visited;
+    let poplist;
     function explorefield() {
         visited = new Array(new Array(6), new Array(6), new Array(6), new Array(6), new Array(6), new Array(6), new Array(6), new Array(6), new Array(6), new Array(6), new Array(6), new Array(6), new Array(6)); //13x6 array
-        var ispopstate = 0; //뿌요가 하나라도 터지면 1 반환
+        let ispopstate = 0; //뿌요가 하나라도 터지면 1 반환
         //탐색
-        for (var i = 0; i < 13; i++) {
-            for (var j = 0; j < 6; j++) {
+        for (let i = 0; i < 13; i++) {
+            for (let j = 0; j < 6; j++) {
                 visited[i][j] = 0;
             }
         }
-        for (var i = 0; i < 12; i++) {
-            var _loop_1 = function (j) {
+        for (let i = 0; i < 12; i++) {
+            for (let j = 0; j < 6; j++) {
                 if (!visited[1 + i][j] && gamefield[i + 1][j] != 0) {
                     poplist = [];
                     dfs(i, j, gamefield[i + 1][j]);
                     if (poplist.length >= 4) {
                         connectCount = poplist.length;
                         ispopstate = 1;
-                        var colortable_1 = [0, 0, 0, 0, 0, 0, 0];
+                        let colortable = [0, 0, 0, 0, 0, 0, 0];
                         poplist.forEach(function (p) {
                             gamefield[p.y + 1][p.x] = 0;
-                            colortable_1[p.c] = 1;
+                            colortable[p.c] = 1;
                             colorCount = 0;
-                            for (var i_1 = 1; i_1 < 6; i_1++) {
-                                if (colortable_1[i_1] == 1) {
+                            for (let i = 1; i < 6; i++) {
+                                if (colortable[i] == 1) {
                                     colorCount++;
                                 }
                             }
                         });
                     }
                 }
-            };
-            for (var j = 0; j < 6; j++) {
-                _loop_1(j);
             }
         }
         return ispopstate;
     }
     function dfs(y, x, ch) {
-        var dx = new Array(-1, 0, 1, 0);
-        var dy = new Array(0, -1, 0, 1);
-        for (var i = 0; i < 4; i++) {
-            var nx = dx[i] + x;
-            var ny = dy[i] + y;
+        let dx = new Array(-1, 0, 1, 0);
+        let dy = new Array(0, -1, 0, 1);
+        for (let i = 0; i < 4; i++) {
+            let nx = dx[i] + x;
+            let ny = dy[i] + y;
             if (0 <= nx && nx < 6 && 0 <= ny && ny < 12) {
                 if (visited[ny + 1][nx] != 1) {
                     if (gamefield[ny + 1][nx] == ch) {
                         poplist.push({
                             y: ny,
                             x: nx,
-                            c: gamefield[ny + 1][nx]
+                            c: gamefield[ny + 1][nx],
                         });
                         visited[ny + 1][nx] = 1;
                         dfs(ny, nx, ch);
@@ -476,6 +473,10 @@ function game() {
             //왼쪽 바라봄
             puyoh = (puyoy + 32) / 16;
             break;
+    }
+    if (keymap["115"] == true){
+        //F4로 리스타트
+        initGame();
     }
     deltaframe++;
     if (ispop == 0) {
@@ -562,7 +563,7 @@ function game() {
             //뿌요 착지성공
             switch (puyorread(puyor)) {
                 case 0: //1자
-                    for (var i = 0; i < 13; i++) {
+                    for (let i = 0; i < 13; i++) {
                         if (gamefield[12 - i][puyox / 16] == 0) {
                             //이미 필드에뿌요 없으면 뿌요 설치
                             if (i != 12)
@@ -574,7 +575,7 @@ function game() {
                     }
                     break;
                 case 1: //ㅡ자 오른회전
-                    for (var i = 0; i < 14; i++) {
+                    for (let i = 0; i < 14; i++) {
                         if (i == 13) {
                             //13열 위에서 놓았을 때
                             if (gamefield[0][puyox / 16] == 0) {
@@ -596,7 +597,7 @@ function game() {
                     }
                     break;
                 case 2: //1자 상하반전
-                    for (var i = 0; i < 13; i++) {
+                    for (let i = 0; i < 13; i++) {
                         if (gamefield[12 - i][puyox / 16] == 0) {
                             //이미 필드에뿌요 없으면 뿌요 설치
                             if (i != 12)
@@ -608,7 +609,7 @@ function game() {
                     }
                     break;
                 case 3: //ㅡ자 왼쪽회전
-                    for (var i = 0; i < 14; i++) {
+                    for (let i = 0; i < 14; i++) {
                         if (i == 13) {
                             //13열 위에서 놓았을 때\
                             if (gamefield[0][puyox / 16] == 0) {
@@ -749,7 +750,7 @@ function game() {
             ispopstateend = explorefield();
             if (ispopstateend == 1) {
                 rensa++;
-                var bonustmp = (rensaBonusTable[rensa] + connectBonusTable[connectCount] + colorBonusTable[colorCount]);
+                let bonustmp = (rensaBonusTable[rensa] + connectBonusTable[connectCount] + colorBonusTable[colorCount]);
                 if (bonustmp == 0)
                     bonustmp = 1;
                 puyoScore += connectCount * bonustmp * 10;
@@ -777,9 +778,9 @@ function game() {
                 //필드 높이 저장
                 updateGameFieldHeight();
                 $(".playerpuyo").show();
-                var isallclear = 1;
-                for (var i = 0; i < 13; i++) {
-                    for (var j = 0; j < 6; j++) {
+                let isallclear = 1;
+                for (let i = 0; i < 13; i++) {
+                    for (let j = 0; j < 6; j++) {
                         if (gamefield[i][j] != 0) {
                             isallclear = 0;
                             break;
