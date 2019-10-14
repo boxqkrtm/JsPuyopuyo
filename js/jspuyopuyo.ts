@@ -54,10 +54,10 @@ function removeClass(ele, cls) {
 
 //숫자+문자를 시드값으로 변환
 function readSeedInput() {
-    if ((<HTMLInputElement>document.querySelector(".puyoSeed")).value == "") {
-        (<HTMLInputElement>document.querySelector(".puyoSeed")).value = "" + (Math.round(Math.random() * 65535));
+    if (( < HTMLInputElement > document.querySelector(".puyoSeed")).value == "") {
+        ( < HTMLInputElement > document.querySelector(".puyoSeed")).value = "" + (Math.round(Math.random() * 65535));
     }
-    let inputseed = (<HTMLInputElement>document.querySelector(".puyoSeed")).value;
+    let inputseed = ( < HTMLInputElement > document.querySelector(".puyoSeed")).value;
     let output = 0;
     for (let i = 0; i < inputseed.length; i++) {
         output += inputseed.charCodeAt(i) * Math.pow(10, i);
@@ -78,11 +78,11 @@ function rand() {
  */
 
 //옵션버튼
-$(".config-btn").on("click", function () {
+$(".config-btn").on("click", function() {
     $(".config-wrapper").css("display", "flex");
 });
 
-$(".config-wrapper").on("click", function (e) {
+$(".config-wrapper").on("click", function(e) {
     if (e.target === this) {
         $(".config-wrapper").css("display", "none");
     }
@@ -92,7 +92,7 @@ let musicOn = false;
 let musicElem = null;
 
 //음악 토글버튼
-$(".music-btn").on("click", function () {
+$(".music-btn").on("click", function() {
     if (!musicOn) {
         musicElem = $(`<iframe width="0" height="0" src="https://www.youtube.com/embed/3ZtXZQq6UMk?autoplay=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`);
         musicElem.appendTo($('html'));
@@ -106,18 +106,18 @@ $(".music-btn").on("click", function () {
 });
 
 //정보 버튼
-$(".info-btn").on("click", function () {
+$(".info-btn").on("click", function() {
     $(".info-wrapper").css("display", "flex");
 });
 
-$(".info-wrapper").on("click", function (e) {
+$(".info-wrapper").on("click", function(e) {
     if (e.target === this) {
         $(".info-wrapper").css("display", "none");
     }
 });
 
 //빠른 리셋 버튼
-$(".reset-btn").on("click", function () {
+$(".reset-btn").on("click", function() {
     $(".seedApply").click();
 });
 
@@ -126,30 +126,31 @@ $(".reset-btn").on("click", function () {
  */
 
 //시드 보관함 적용
-$("#seedStorage").change(function(){
-    if($(this).val() !== 0){
+$("#seedStorage").change(function() {
+    if ($(this).val() !== 0) {
         $(".puyoSeed").val($(this).val());
-    }if($(this).val()=='time'){
-        $(".puyoSeed").val(new Date().getMonth().toString()+1)+''+new Date().getDate().toString();
+    }
+    if ($(this).val() == 'time') {
+        $(".puyoSeed").val(new Date().getMonth().toString() + 1) + '' + new Date().getDate().toString();
     }
 });
 
 //게임 화면 크기 스케일 설정
-$(".puyoScreenScale").change(function(){
+$(".puyoScreenScale").change(function() {
     $(".puyogame").removeClass("scale20");
-    switch($(this).val()){
+    switch ($(this).val()) {
         case "10":
             break;
         case "20":
             $(".puyogame").addClass("scale20");
             break;
-        defalut:
-            break;
+            defalut:
+                break;
     }
 });
 
 //시드값 적용 버튼(실제로는 게임 리셋)
-$(".seedApply").click(function () {
+$(".seedApply").click(function() {
     initGame();
 });
 
@@ -267,29 +268,29 @@ function initGame() {
         $(".puyogame .puyofield").html(sethtml);
         $(".puyogame .gameinfo").html(infoHtml);
 
-        switch($(".playOption").val()){
+        switch ($(".playOption").val()) {
             case "play":
-                PuyoPlayMode=0;
+                PuyoPlayMode = 0;
                 break;
             case "edit":
-                PuyoPlayMode=1;
+                PuyoPlayMode = 1;
                 break;
         }
-    
+
         //뿌요 에디터
-        $("#game1 .puyoline > .puyo").on("mouseover",(function(){
-            if(PuyoPlayMode == 1){
+        $("#game1 .puyoline > .puyo").on("mouseover", (function() {
+            if (PuyoPlayMode == 1) {
                 let a;
                 let b;
                 a = $(this).attr("class").split(" ")[1].split("arr")[1].split("-")[0];
                 b = $(this).attr("class").split(" ")[1].split("arr")[1].split("-")[1];
-                if(keymap[48]==1)gamefield[a][b]=0;
-                if(keymap[49]==1)gamefield[a][b]=1;
-                if(keymap[50]==1)gamefield[a][b]=2;
-                if(keymap[51]==1)gamefield[a][b]=3;
-                if(keymap[52]==1)gamefield[a][b]=4;
-                if(keymap[53]==1)gamefield[a][b]=5;
-                if(keymap[54]==1)gamefield[a][b]=6;
+                if (keymap[48] == 1) gamefield[a][b] = 0;
+                if (keymap[49] == 1) gamefield[a][b] = 1;
+                if (keymap[50] == 1) gamefield[a][b] = 2;
+                if (keymap[51] == 1) gamefield[a][b] = 3;
+                if (keymap[52] == 1) gamefield[a][b] = 4;
+                if (keymap[53] == 1) gamefield[a][b] = 5;
+                if (keymap[54] == 1) gamefield[a][b] = 6;
                 renderScreen();
                 updateGameFieldHeight();
             }
@@ -336,14 +337,14 @@ function initGame() {
     randomSeed = readSeedInput();
 
     //set editable value
-    freefallspeed = parseInt((<HTMLOptionElement>document.querySelector(".freefallSpeedOption")).value);
-    deltaframe = freefallspeed;//초기 뿌요는 즉시나오기 위해 설정된 프레임값임
+    freefallspeed = parseInt(( < HTMLOptionElement > document.querySelector(".freefallSpeedOption")).value);
+    deltaframe = freefallspeed; //초기 뿌요는 즉시나오기 위해 설정된 프레임값임
 
     //reset field
     for (let i = 0; i < 13; i++) {
         for (let j = 0; j < 6; j++) {
-            gamefield[i][j] = parseInt($(".presetOption").val().toString().charAt(i*6+j));
-            console.log($(".presetOption").val().toString().charAt(i*6+j));
+            gamefield[i][j] = parseInt($(".presetOption").val().toString().charAt(i * 6 + j));
+            console.log($(".presetOption").val().toString().charAt(i * 6 + j));
             poptable[i][j] = 0;
             gamefieldheight[j] = 0;
         }
@@ -353,7 +354,7 @@ function initGame() {
     updateGameFieldHeight();
 
     //set puyotable
-    let temprand = Math.round(rand() * 4)+1;//1~5
+    let temprand = Math.round(rand() * 4) + 1; //1~5
     switch ($(".puyoBagOption").val()) {
         case "pure": //노멀 4색 뿌요
             puyotable[1] = 64;
@@ -431,7 +432,7 @@ function initGame() {
 }
 
 //키 리스너
-onkeydown = onkeyup = function (e: KeyboardEvent) {
+onkeydown = onkeyup = function(e: KeyboardEvent) {
     keymap[e.keyCode] = e.type == 'keydown';
 };
 
@@ -480,7 +481,7 @@ function game() {
                         connectCount = poplist.length;
                         ispopstate = 1;
                         let colortable: Number[] = [0, 0, 0, 0, 0, 0, 0];
-                        poplist.forEach(function (p) {
+                        poplist.forEach(function(p) {
                             gamefield[p.y + 1][p.x] = 0;
                             colortable[p.c] = 1;
                             colorCount = 0;
@@ -764,7 +765,7 @@ function game() {
             }
 
             //퀵턴
-            if ( (puyorread(puyor)==0||puyorread(puyor)==2) && keymap["88"] == true && puyocollide[1] == 1 && puyocollide[3] == 1 && puyospindelay <= 0) {
+            if ((puyorread(puyor) == 0 || puyorread(puyor) == 2) && keymap["88"] == true && puyocollide[1] == 1 && puyocollide[3] == 1 && puyospindelay <= 0) {
                 //우측 퀵턴
                 if (rightspinfail >= 0.5) {
                     puyor += 2;
@@ -774,7 +775,7 @@ function game() {
                 } else {
                     rightspinfail += 10;
                 }
-            } else if ( (puyorread(puyor)==0||puyorread(puyor)==2) && keymap["90"] == true && puyocollide[1] == 1 && puyocollide[3] == 1 && puyospindelay <= 0) {
+            } else if ((puyorread(puyor) == 0 || puyorread(puyor) == 2) && keymap["90"] == true && puyocollide[1] == 1 && puyocollide[3] == 1 && puyospindelay <= 0) {
                 //좌측 퀵턴
                 if (leftspinfail >= 0.5) {
                     puyor -= 2;
@@ -787,11 +788,11 @@ function game() {
             }
 
             //뿌요 회전 (좌우가 막혔을 떄 가로상태에서는 회전가능)
-            if (keymap["90"] == true && puyospindelay <= 0 && (!(puyocollide[1] == 1 && puyocollide[3] == 1) || (puyorread(puyor)==1||puyorread(puyor)==3))) {
+            if (keymap["90"] == true && puyospindelay <= 0 && (!(puyocollide[1] == 1 && puyocollide[3] == 1) || (puyorread(puyor) == 1 || puyorread(puyor) == 3))) {
                 //좌회전
                 puyor -= 1;
                 puyospindelay = 1;
-            } else if (keymap["88"] == true && puyospindelay <= 0 && (!(puyocollide[1] == 1 && puyocollide[3] == 1) || (puyorread(puyor)==1||puyorread(puyor)==3))) {
+            } else if (keymap["88"] == true && puyospindelay <= 0 && (!(puyocollide[1] == 1 && puyocollide[3] == 1) || (puyorread(puyor) == 1 || puyorread(puyor) == 3))) {
                 //우회전
                 puyor += 1;
                 puyospindelay = 1;
@@ -816,7 +817,7 @@ function game() {
             ispopstateend = explorefield();
             if (ispopstateend == 1) {
                 rensa++;
-                let bonustmp = (rensaBonusTable[rensa] + connectBonusTable[connectCount>11?11:connectCount] + colorBonusTable[colorCount]);
+                let bonustmp = (rensaBonusTable[rensa] + connectBonusTable[connectCount > 11 ? 11 : connectCount] + colorBonusTable[colorCount]);
                 if (bonustmp == 0) bonustmp = 1;
                 puyoScore += connectCount * bonustmp * 10;
                 document.querySelector(".score").textContent = puyoScore;
@@ -872,7 +873,7 @@ function game() {
 
 //게임 생성 및 루프
 initGame();
-setInterval(function () {
+setInterval(function() {
     game();
 }, 10);
 //16 60fps
