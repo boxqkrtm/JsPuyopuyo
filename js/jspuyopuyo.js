@@ -495,6 +495,20 @@ function game() {
                                     colorCount++;
                                 }
                             }
+                            for (let i = 0; i < 4; i++) {
+                                //방해뿌요 연산
+                                let y = p.y;
+                                let x = p.x;
+                                let dx = new Array(-1, 0, 1, 0);
+                                let dy = new Array(0, -1, 0, 1);
+                                y += dy[i];
+                                x += dx[i];
+                                if(y>=0 && y<12 && x<6 && x>=0){
+                                    if(gamefield[y+1][x]==6){
+                                        gamefield[y+1][x]=0;
+                                    }
+                                }
+                            }
                         });
                     }
                 }
