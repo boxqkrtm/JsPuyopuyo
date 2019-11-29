@@ -243,7 +243,7 @@ function loadGameHistory(target){
     }
     gamefield=JSON.parse(JSON.stringify(gamefieldhistory[target]));
     puyoScore = gamescorehistory[target];
-    if(target==0)puyoScore=51;
+    if(target==0)puyoScore=(gamefieldheight[2]+2)*16/4;
     console.log(target);
 }
 //게임 초기화
@@ -359,6 +359,7 @@ function initGame() {
             gamefieldheight[j] = 0;
         }
     }
+    gamefieldhistory[0]=JSON.parse(JSON.stringify(gamefield));
     //필드 높이 저장
     updateGameFieldHeight();
     //set puyotable
