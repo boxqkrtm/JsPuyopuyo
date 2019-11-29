@@ -244,7 +244,6 @@ function loadGameHistory(target){
     gamefield=JSON.parse(JSON.stringify(gamefieldhistory[target]));
     puyoScore = gamescorehistory[target];
     if(target==0)puyoScore=(gamefieldheight[2]+2)*16/4;
-    console.log(target);
 }
 //게임 초기화
 function initGame() {
@@ -354,7 +353,6 @@ function initGame() {
     for (let i = 0; i < 13; i++) {
         for (let j = 0; j < 6; j++) {
             gamefield[i][j] = parseInt($(".presetOption").val().toString().charAt(i * 6 + j));
-            console.log($(".presetOption").val().toString().charAt(i * 6 + j));
             poptable[i][j] = 0;
             gamefieldheight[j] = 0;
         }
@@ -848,7 +846,7 @@ function game() {
                 if (bonustmp == 0)
                     bonustmp = 1;
                 puyoScore += connectCount * bonustmp * 10;
-                document.querySelector(".score").textContent = puyoScore;
+                document.querySelector(".score").textContent = (connectCount*10+"x"+bonustmp);
                 document.querySelector(".rensa").textContent = rensa + "연쇄";
                 if (rensa < 7) {
                     new Audio("/resource/puyo/chain" + rensa + ".ogg").play();
@@ -895,6 +893,7 @@ function game() {
             //터진모습 렌더링
             puyoapplygravity();
             renderScreen();
+            document.querySelector(".score").textContent = puyoScore;
             //더 연쇄가 이어지는지 체크
             ispopstateend = 0;
             deltaframe = 0;
