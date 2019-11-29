@@ -1,3 +1,5 @@
+"use strict";
+
 //글로벌 변수 지정
 let gamefield;
 let gamefieldheight;
@@ -34,20 +36,7 @@ let PuyoPlayMode;
 //옵션을 위한 변수
 let freefallspeed;
 //리소스 지정
-//wip
-function hasClass(ele, cls) {
-    return !!ele.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
-}
-function addClass(ele, cls) {
-    if (!hasClass(ele, cls))
-        ele.className += " " + cls;
-}
-function removeClass(ele, cls) {
-    if (hasClass(ele, cls)) {
-        var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
-        ele.className = ele.className.replace(reg, ' ');
-    }
-}
+
 //숫자+문자를 시드값으로 변환
 function readSeedInput() {
     if (document.querySelector(".puyoSeed").value == "") {
@@ -595,8 +584,8 @@ function game() {
                         if (gamefield[12 - i][puyox / 16] == 0) {
                             //이미 필드에뿌요 없으면 뿌요 설치
                             if (i != 12)
-                                gamefield[12 - i - 1][puyox / 16] = puyobag[puyobagIndex - 2];
-                            gamefield[12 - i][puyox / 16] = puyobag[puyobagIndex - 1];
+                                gamefield[12 - i - 1][puyox / 16] = puyobag[(puyobagIndex- 2) % 256];
+                            gamefield[12 - i][puyox / 16] = puyobag[(puyobagIndex -1) % 256];
                             break;
                         }
                         //없으면 윗줄로 이동 반복
@@ -715,10 +704,22 @@ function game() {
             }
             //뿌요 수직이동 상승
             if (keymap["38"] == true && puyocollide[0] == 0 && puyoh > 0) {
-                //down
+                //up
                 puyoy -= 4;
                 puyoScore -= 1;
                 document.querySelector(".score").textContent = puyoScore;
+            }else if(keymap["38"] == true && puyocollide[0] == 0 && puyoh <= 0 && puyobagIndex>=4) {
+                //rollback puyo
+                droppuyo = 1;
+                ispop = 0;
+                puyox = 32;
+                puyoy = -32;
+                puyor = 0;
+                puyobagIndex -= 2;
+                renderScreen();
+                droppuyotimer = 80;
+                //필드 높이 저장
+                updateGameFieldHeight();
             }
             //퀵턴
             if ((puyorread(puyor) == 0 || puyorread(puyor) == 2) && keymap["88"] == true && puyocollide[1] == 1 && puyocollide[3] == 1 && puyospindelay <= 0) {
