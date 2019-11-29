@@ -478,7 +478,8 @@ function game() {
         }
         for (let i = 0; i < 12; i++) {
             for (let j = 0; j < 6; j++) {
-                if (!visited[1 + i][j] && gamefield[i + 1][j] != 0) {
+                //not air and garbage
+                if (!visited[1 + i][j] && gamefield[i + 1][j] != 0 && gamefield[i + 1][j] != 6) {
                     poplist = [];
                     dfs(i, j, gamefield[i + 1][j]);
                     if (poplist.length >= 4) {
