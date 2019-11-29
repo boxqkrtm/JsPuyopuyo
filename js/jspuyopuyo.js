@@ -1,7 +1,10 @@
 "use strict";
 
 //글로벌 변수 지정
+let historymax = 256 // 기록 가능한 히스토리 길이
 let gamefield;
+let gamescorehistory;
+let gamefieldhistory;
 let gamefieldheight;
 let puyobag;
 let puyotable;
@@ -36,6 +39,27 @@ let PuyoPlayMode;
 //옵션을 위한 변수
 let freefallspeed;
 //리소스 지정
+//배열 생성 함수
+function matrix2d(m, n) {
+    let result = []
+    for(let i = 0; i < n; i++) {
+        result.push(new Array(m).fill(0))
+    }
+    return result
+}
+
+function matrix3d(m, n, o) {
+    let result = [];
+    let result2 = [];
+    for(let i = 0; i < o; i++) {
+        for(let j = 0; j < n; j++) {
+            result2.push(new Array(m).fill(0))
+        }
+        result.push(result2)
+        result2 = [];
+    }
+    return result;
+}
 
 //숫자+문자를 시드값으로 변환
 function readSeedInput() {
@@ -198,6 +222,30 @@ function updateGameFieldHeight() {
         }
     }
 }
+function saveGameHistory(){
+    gamefieldhistory[(puyobagIndex-2)/2]=JSON.parse(JSON.stringify(gamefield));
+    gamescorehistory[(puyobagIndex-2)/2]=puyoScore;
+}
+function loadGameHistory(target){
+    switch(target){
+        case -1:
+            target = (puyobagIndex-2-2)/2;
+            puyobagIndex -= 2;
+            break;
+        case 0:
+            target = (puyobagIndex-2)/2;
+            break;
+        case 1:
+            target = (puyobagIndex)/2;
+            puyobagIndex += 2;
+            break;
+        default:
+    }
+    gamefield=JSON.parse(JSON.stringify(gamefieldhistory[target]));
+    puyoScore = gamescorehistory[target];
+    if(target==0)puyoScore=51;
+    console.log(target);
+}
 //게임 초기화
 function initGame() {
     //필드 html 요소 생성
@@ -264,7 +312,9 @@ function initGame() {
         document.querySelector(".score").textContent = puyoScore;
         document.querySelector(".rensa").textContent = rensa + "연쇄";
     }
-    //reset letiable
+    //reset variable
+    gamescorehistory = new Array(historymax).fill(0);
+    gamefieldhistory = matrix3d(6,13,historymax);
     gamefield = new Array(new Array(6), new Array(6), new Array(6), new Array(6), new Array(6), new Array(6), new Array(6), new Array(6), new Array(6), new Array(6), new Array(6), new Array(6), new Array(6));
     gamefieldheight = new Array(6);
     poptable = new Array(new Array(6), new Array(6), new Array(6), new Array(6), new Array(6), new Array(6), new Array(6), new Array(6), new Array(6), new Array(6), new Array(6), new Array(6), new Array(6));
@@ -476,27 +526,27 @@ function game() {
             return 0;
         return gamefieldheight[col];
     }
-    //뿌요 회전값 읽어서 실제 높이 계산(뿌요 바닥 기준)
-    switch (puyorread(puyor)) {
-        case 0:
-            //위를 바라봄
-            puyoh = (puyoy + 32) / 16;
-            break;
-        case 1:
-            //오른쪽 바라봄
-            puyoh = (puyoy + 32) / 16;
-            break;
-        case 2:
-            //아래 바라봄
-            puyoh = (puyoy + 48) / 16;
-            break;
-        case 3:
-            //왼쪽 바라봄
-            puyoh = (puyoy + 32) / 16;
-            break;
-    }
     deltaframe++;
     if (ispop == 0) {
+        //뿌요 회전값 읽어서 실제 높이 계산(뿌요 바닥 기준)
+        switch (puyorread(puyor)) {
+            case 0:
+                //위를 바라봄
+                puyoh = (puyoy + 32) / 16;
+                break;
+            case 1:
+                //오른쪽 바라봄
+                puyoh = (puyoy + 32) / 16;
+                break;
+            case 2:
+                //아래 바라봄
+                puyoh = (puyoy + 48) / 16;
+                break;
+            case 3:
+                //왼쪽 바라봄
+                puyoh = (puyoy + 32) / 16;
+                break;
+        }
         $(".puyofield .playerpuyo").css("transform", "rotate(" + (puyor * 90) + "deg)");
         $(".puyofield .playerpuyo").css("top", puyoy + "px");
         $(".puyofield .playerpuyo").css("left", puyox + "px");
@@ -713,13 +763,12 @@ function game() {
                 droppuyo = 1;
                 ispop = 0;
                 puyox = 32;
-                puyoy = -32;
                 puyor = 0;
-                puyobagIndex -= 2;
+                loadGameHistory(-1);
+                updateGameFieldHeight();
+                puyoy = gamefieldheight[2]*16;
                 renderScreen();
                 droppuyotimer = 80;
-                //필드 높이 저장
-                updateGameFieldHeight();
             }
             //퀵턴
             if ((puyorread(puyor) == 0 || puyorread(puyor) == 2) && keymap["88"] == true && puyocollide[1] == 1 && puyocollide[3] == 1 && puyospindelay <= 0) {
@@ -821,6 +870,8 @@ function game() {
                     puyoScore += 2100;
                     document.querySelector(".score").textContent = puyoScore;
                 }
+                //히스토리 저장
+                saveGameHistory();
             }
             deltaframe = 0;
         }
