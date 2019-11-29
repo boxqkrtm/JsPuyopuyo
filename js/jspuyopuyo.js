@@ -662,17 +662,17 @@ function game() {
                         if (i == 13) {
                             //13열 위에서 놓았을 때
                             if (gamefield[0][puyox / 16] == 0) {
-                                gamefield[0][puyox / 16] = puyobag[puyobagIndex - 1];
+                                gamefield[0][puyox / 16] = puyobag[(puyobagIndex - 1) % 256];
                             }
                             if (gamefield[0][(puyox / 16) + 1] == 0) {
-                                gamefield[0][(puyox / 16) + 1] = puyobag[puyobagIndex - 2];
+                                gamefield[0][(puyox / 16) + 1] = puyobag[(puyobagIndex - 2) % 256];
                             }
                         }
                         else {
                             if (gamefield[12 - i][puyox / 16] == 0 && gamefield[12 - i][(puyox / 16) + 1] == 0) {
                                 //이미 필드에뿌요 없으면 뿌요 설치
-                                gamefield[12 - i][puyox / 16] = puyobag[puyobagIndex - 1];
-                                gamefield[12 - i][(puyox / 16) + 1] = puyobag[puyobagIndex - 2];
+                                gamefield[12 - i][puyox / 16] = puyobag[(puyobagIndex - 1) % 256];
+                                gamefield[12 - i][(puyox / 16) + 1] = puyobag[(puyobagIndex - 2) % 256];
                                 break;
                             }
                         }
@@ -684,8 +684,8 @@ function game() {
                         if (gamefield[12 - i][puyox / 16] == 0) {
                             //이미 필드에뿌요 없으면 뿌요 설치
                             if (i != 12)
-                                gamefield[12 - i - 1][puyox / 16] = puyobag[puyobagIndex - 1];
-                            gamefield[12 - i][puyox / 16] = puyobag[puyobagIndex - 2];
+                                gamefield[12 - i - 1][puyox / 16] = puyobag[(puyobagIndex - 1) % 256];
+                            gamefield[12 - i][puyox / 16] = puyobag[(puyobagIndex - 2) % 256];
                             break;
                         }
                         //없으면 윗줄로 이동 반복
@@ -696,17 +696,17 @@ function game() {
                         if (i == 13) {
                             //13열 위에서 놓았을 때\
                             if (gamefield[0][puyox / 16] == 0) {
-                                gamefield[0][puyox / 16] = puyobag[puyobagIndex - 1];
+                                gamefield[0][puyox / 16] = puyobag[(puyobagIndex - 1) % 256];
                             }
                             if (gamefield[0][(puyox / 16) - 1] == 0) {
-                                gamefield[0][(puyox / 16) - 1] = puyobag[puyobagIndex - 2];
+                                gamefield[0][(puyox / 16) - 1] = puyobag[(puyobagIndex - 2) % 256];
                             }
                         }
                         else {
                             if (gamefield[12 - i][puyox / 16] == 0 && gamefield[12 - i][(puyox / 16) - 1] == 0) {
                                 //이미 필드에뿌요 없으면 뿌요 설치
-                                gamefield[12 - i][puyox / 16] = puyobag[puyobagIndex - 1];
-                                gamefield[12 - i][(puyox / 16) - 1] = puyobag[puyobagIndex - 2];
+                                gamefield[12 - i][puyox / 16] = puyobag[(puyobagIndex - 1) % 256];
+                                gamefield[12 - i][(puyox / 16) - 1] = puyobag[(puyobagIndex - 2) % 256];
                                 break;
                             }
                         }
