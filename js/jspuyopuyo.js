@@ -721,6 +721,10 @@ function game() {
             rensa = 0;
         }
         //키 입력
+        if (keymap["115"] == true) {
+            //리셋
+            initGame();
+        }
         if (!(keymap.length == 0)) {
             //뿌요 좌우이동
             if (keymap["37"] == true && puyodas == 10 && puyocollide[3] == 0) {
