@@ -97,7 +97,7 @@ let musicElem = null;
 //음악 토글버튼
 $(".music-btn").on("click", function () {
     if (!musicOn) {
-        musicElem = $(`<iframe width="0" height="0" src="https://www.youtube.com/embed/3ZtXZQq6UMk?autoplay=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`);
+        musicElem = $(`<iframe width="0" height="0" src="https://www.youtube.com/watch?v=qrWYlozZhd0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`);
         musicElem.appendTo($('html'));
         $(".music-btn").text("음악 끄기");
     }
